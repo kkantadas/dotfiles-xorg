@@ -1,0 +1,44 @@
+#S(GDUMP
+   :NUMBER 1
+   :NAME "Alpha"
+   :TREE ((#S(FDUMP
+              :NUMBER 0
+              :X 0
+              :Y 0
+              :WIDTH 470
+              :HEIGHT 1080
+              :WINDOWS NIL
+              :CURRENT NIL)
+           ((#S(FDUMP
+                :NUMBER 2
+                :X 470
+                :Y 0
+                :WIDTH 1050
+                :HEIGHT 200
+                :WINDOWS NIL
+                :CURRENT NIL)
+             #S(FDUMP
+                :NUMBER 4
+                :X 470
+                :Y 200
+                :WIDTH 1050
+                :HEIGHT 640
+		 :WINDOWS ()
+                :CURRENT NIL))
+            #S(FDUMP
+               :NUMBER 3
+               :X 470
+               :Y 840
+               :WIDTH 1050
+               :HEIGHT 240
+               :WINDOWS NIL
+               :CURRENT NIL))
+           #S(FDUMP
+              :NUMBER 1
+              :X 1520
+              :Y 0
+              :WIDTH 400
+              :HEIGHT 1080
+              :WINDOWS NIL
+              :CURRENT NIL)))
+   :CURRENT 4)

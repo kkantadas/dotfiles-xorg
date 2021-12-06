@@ -1,0 +1,180 @@
+      ------- ARCH INSTALL --------
+
+# timedatectl set-ntp true
+# timedatectl status
+# pacman -S reflector
+# reflector -c India -a 6 --sort rate --save /etc/pacman.d/mirrorlist
+# pacman -Syy
+
+LEGECI-BOOT
+# cfdisk /dev/sda
+
+--------------------------------
+UEFI BOOT
+#
+check if sys is in UEFI mode
+# ls /sys/firmare/efi/efivars
+Boot000......
+
+# fdisk -l
+# fdisk /dev/sda
+ * g >format drive into gpt patition table
+ * n >new partition
+ * number of drive (sda1 sda2 ...)
+ * section (default)
+ * +300M >/boot(efi) || * +30G >/root  || * ENTER >the remaining space
+ * t >type 
+   * 1 >EFI System   	
+   * L >List types	
+ * w >write on disk
+
+*for UEFI system
+	# mkfs.fat -F32 /dev/sda1
+
+----------------------------------
+# mkfs.ext4 /dev/sda1
+# mkfs.ext4 /dev/sda2
+
+# mkswap /dev/sdaX
+# swapon /dev/sdaX
+
+# lsblk -f
+
+*for systemclt-boot
+	# mkdir /mnt/boot
+	# mount /dev/(FAT32 patition) /mnt/boot
+
+# mount /dev/sda1 /mnt
+# mkdir /mnt/home
+# mount /dev/sda2 /mnt/home
+
+# nano /etc/pacman.d/mirrorlist
+
+# pacstrap -i /mnt base base-devel linux linux-firmware 
+
+# genfstab -U -p /mnt >> /mnt/etc/fstab
+# nano /mnt/etc/fstab
+
+# arch-chroot /mnt /bin/bash
+
+# nano /etc/locale.gen
+#en_SG ISO-8859-1
+en_US.UTF-8 UTF-8
+#en_US ISO-8859-1
+
+# locale-gen
+# echo LANG=en_US.UTF-8 > /etc/locale.conf
+# export LANG=en_US.UTF-8
+
+# ln -sf /usr/share/zoneinfo/Zone/SubZone /etc/localtime
+# hwclock --systohc --utc
+# echo myhostname > /etc/hostname
+# nano /etc/hosts
+---------------------------------
+	* 127.0.0.1   	localhost
+	* ::1   	localhost
+	* 127.0.1.1 	kanta.localdomain	kanta
+---------------------------------
+# pacman -S intel-ucode iw iwd wpa_supplicant dialog
+# mkinitcpio -p linux
+
+# passwd
+
+
+SWAPFILE
+
+# fallocate -l 2G /swapfile
+# chmod 600 /swapfile
+# mkswap /swapfile
+# swapon /swapfile
+# echo '/swapfile none swap sw 0 0' | tee -a /etc/fstab
+# cat /etc/fstab
+-----------------------------------------------------
+  ( if you mount a separate partition in to the home/documents 
+    # /dev/sda3
+      UUID=bfc7f2e5-eb2d-4752-9e34-51b39c370c3e       /home/kanta/documents      ext4    	auto,defaults	0 0
+        AND change the promition of the directory -> # sudo chown kanta:kanta /home/kanta/documents #
+------------------------------------------------------        
+Systemctl boot
+
+# bootctl --path=/boot/  install
+
+# nano /boot/loader/loader.conf
+	- default arch-*
+	- timeout 0
+	- editor no
+
+# nano /boot/loader/entries/arch.conf
+	- title     ArchLinux
+	- linux     /vmlinuz-linux	
+	- initrd    /intel-ucode.img   # if intel-ucode is installed 
+	- initrd    /initramfs-linux.img   
+        - options   root=UUID=i??0042 1545 51451 5145.... rw quiet splash  i8042.nokbd #<--for no keyboard
+
+# in vim :r !blkid 
+--------------------------------------------------------------------
+
+Systemd Network
+
+# ip addr ### en is here the lan network
+# vim /etc/systemd/network/en.network   -- /etc/systemd/network/wl.network
+-------------------
+--	[Match]
+--	Name=en*  ##can change for wifi to - Name=wl* - 
+--                ##and - restart systemd-networkd and - ip a
+--	
+--	[Network]
+--	DHCP=ipv4
+--------------------
+# systemdctl enable systemd-networkd
+# systemdctl enable systemd-resolved
+--------------------
+# systemdctl enable systemd-timesyncd
+# systemdctl enable iwd
+# timedatectl
+# timedatectl set-timezone Asia/Kolkata
+# timedatectl set-ntp true
+# hostnamectl set-hostname kanta
+----------------------
+# pacman -S wpa_supplicant iwctl
+#  
+# iwctl
+# [iwd]# station wlan0 get-networks # to get exesspoint, wifi address
+# systemdctl enable wpa_supplicant@wlp4s0 # this is at the wifi device..
+# vim /etc/wpa_supplicant/wpa_supplicant-wlp4s0.conf
+----------------------
+--	ctrl_interface=/run/wpa_supplicant
+--	ctrl_interface_group=wheel
+--	update_config=1
+--
+--	network={
+		ssid=Kkd Mayapur Online
+		psk="31393560"
+ 		}
+------------------------
+
+-OR other Bootloader
+
+# pacman -S syslinux
+# syslinux-install_update -iam
+
+-OR
+
+# pacman -S grub os-prober
+# grub-install --target=i386-pc --recheck /dev/sda
+# grub-mkconfig -o /boot/grub/grub.cfg
+
+-------------------------
+
+# exit
+
+# umount /mnt/home
+# umount /mnt 
+
+
+# reboot
+
+
+# useradd -m -G wheel -s /bin/bash kanta
+
+git clone https://github.com/kkantadas/dotfiles.git

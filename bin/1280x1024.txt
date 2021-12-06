@@ -1,0 +1,7 @@
+.Xresources 
+    fontsize from 14 to 12 .. monaco
+
+.config/gtk3/settings
+    fontsize from 9 to 8 
+bin/wallpaper.sh
+  address from bin/wallpaers to bin/wallpaper-1280x1024    

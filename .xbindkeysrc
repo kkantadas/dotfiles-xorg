@@ -1,0 +1,14 @@
+
+# Decrease Volume on DAC and DAC 1
+"/usr/bin/amixer set Master 10%-"
+XF86AudioLowerVolume
+
+
+# Raise Volume on DAC and DAC 1
+"/usr/bin/amixer set Master 10%+"
+XF86AudioRaiseVolume
+
+
+"/usr/bin/amixer set Master toggle"
+XF86AudioMute
+

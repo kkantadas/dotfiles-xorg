@@ -1,0 +1,143 @@
+
+
+$ useradd -m -G audio,wheel,video,power,log,storage -s /bin/bash kanta
+$ passwd kanta
+$ visudo
+         > %wheel ALL=(ALL) ALL
+$ (wifi-menu)
+$ iwctl
+  [iwd]# help
+  [iwd]# device list 
+  [iwd]# station wlan0 connect "..."
+  or
+$ iwctl station wlan0 connect "..."
+
+$ pacman -S bash-completion
+           xorg-server xorg-xinit xorg-apps >(xorg-xrdb xorg-xkill xorg-xset xorg-xsetroot)
+
+$ sudo xset b 0 
+
+$ pacman -S alsa-mixer,alsa-tools,xf86-video-intel,xf86-video-modesetting,xf86-input-mouse,xf86-input-synaptics,ntfs-3g,ratpoison   
+
+$ sudo mount -o grid=users,fmask=113,dmask=002 /dev/sdb1 /mnt
+$ cp > . < .bashrc .bash_profile .ratpoisonrc .xinitrc .Xresources .fonts/ .fontconfig/
+$ chmod +x .xinitrc
+
+$ pacman -S urxvt xterm picom (xcompmgr) vim htop dmenu lynu
+$ pacman -S ranger feh mupdf imagemagick git
+
+$ git clone git://github.com/fanglingsu/vimb.git vimb
+
+	       	- libwebkit >=1.5.0
+		- libgtk+-2.0
+		- libsoup >=2.38
+
+$ sudo vim /etc/pacman.conf
+          
+  	  	[archlinuxfr]
+	  	SigLevel = Never
+	  	Server = http://repo.archlinux.fr/$arch
+
+- yay - 
+sudo pacman -Syyu
+sudo pacman -S git
+Clone the repository:
+git clone https://aur.archlinux.org/yay.git
+Move to the directory:
+cd yay
+Build it:
+makepkg -si
+
+$ yay -S aic94xx-firmware wd719x-firmware 
+$ sudo mkinitcpio -p linux
+
+$ pacman -S connman rfkill gtk-engines xcursor-vanilla-dmz arch-wiki-lite sdcv mutt lesspipe
+
+$ sudo systemctl enable rfkill-unblock@
+$ sudo systemctl start rfkill-unblock@.service 
+$ sudo systemctl enable connman.service 
+$ connmanctl
+
+ #-"install intel-uncode ( $ sudo grub-mkconfig -o /boot/grub/grub.cfg)
+
+ #-"enable trim ( in grub or as fstrim.service )
+
+ #-"swapinness ( $ sudo sysctl vm.swappiness=10 )
+ #-"gazelle backlight, change in /etc/default/grub (GRUB_CMDLINE_LINUX_DEFAULT="quiet acpi_os_name=Linux acpi_osi=Linux")
+$ Mount usb
+$ cp .config/vimb/config .mutt/ .gtkrc-2.0 .config/ranger/rifle.conf .urxvt/ext/font-size 
+
+#for bluetooth
+pacman -S bluez bluez-utils  pulseaudio-bluetooth 
+ sudo systemctl start bluetooth.service
+ sudo systemctl enable bluetooth.service
+bluetoothctl
+ power on
+ agent on
+ default-agent
+ scan on    (switch on device... and wait some seconds)
+  pair FC:58:F.......
+  trust FC:58:F.......
+  connect FC:58:F.......
+ scan off
+vim /etc/bluetooth/main.conf
+    AutoEnable=true
+
+Switch device off and switch on again
+sudo rfkill unblock all  # if not working
+
+
+Applications:
+
+antiword sdcv 7z asplell acpi cmatrix mupdf htop klavaro clipt fbreader
+gtk-theme-switch2 dreamchess unclutter libusb dratmenu tar
+flashplugin unzip transmision lesspipe ncdu wget scrot sc w3m links 
+adwaita-icon-theme xrandr ebook-tools vimb dratmenu llpp mtools  
+reflector laptop-mode-tools(in aur) hsetroot(in aur) lsof webkitgtk2 vor vimb
+xorg-xdpyinfo     intel-uncode( sudo grub-mkconfig -o /boot/grub/grub.cfg)
+
+-For Transparency
+
+$ xdpyinfo | grep Composite
+Composite
+
+If there is no output, add the Composite option to the Extensions section of xorg.conf:
+
+$sudo vim /etc/X11/xorg.conf
+Section "Extensions"
+        Option  "Composite" "true"
+EndSection
+
+#For connmanctl after resuming from sleep
+#vim /etc/systemd/system/connman-resume.service 
+
+[Unit]
+Description=Connman resume actions
+After=suspend.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/systemctl stop connman.service
+ExecStart=/usr/bin/systemctl restart connman.service
+
+[Install]
+WantedBy=suspend.target
+~
+#systemctl enable/start connman-resume.service
+
+
+GStreamer
+            + gst-libav
+            + gst-plugins-good
+
+sudo alsactl store #This should save alsamixer configurations to /etc/asound.state which gets loaded every startup
+
+
+AutoLogin without password:
+not Save!
+
+# systemctl edit getty@tty1
+
+[Service]
+ExecStart=
+ExecStart=-/usr/bin/agetty --autologin username --noclear %I $TERM

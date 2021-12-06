@@ -1,0 +1,2 @@
+find /home/ -name file* -exec rm {} \;
+find . -name "*.txt" -exec rename .txt .svg {} \;
