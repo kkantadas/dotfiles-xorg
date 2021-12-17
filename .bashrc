@@ -101,7 +101,8 @@ if [ -x /usr/bin/dircolors ]; then
     alias MountMac='sudo mount -t hfsplus -o force,rw'
     alias umount='sudo umount'
     alias grep='grep --color=auto'
-    alias Vedagrep='cd ~/Vedatxt/ && grep --color=auto -nr'
+    alias Vedagrep='cd ~/Vedatxt/ && grep -nr'
+    #alias Vedagrep='cd ~/Vedatxt/ && grep --color=auto -nr'
     alias sudo='sudo '
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
@@ -143,6 +144,9 @@ fi
     alias l='ls -CF'
 
 # Alias definitions.
+
+#alias | sed -E "s/^alias ([^=]+)='(.*)'$/alias \1 \2 \$*/g; s/'\\\''/'/g;" >~/.emacs.d/eshell/alias
+
 # You may want to put all your additions into a separate file like
 # ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.

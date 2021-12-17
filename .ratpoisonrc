@@ -14,6 +14,7 @@ exec xsetroot -cursor_name left_ptr > /dev/null &
 #addhook switchwin banish
 #exec unclutter -idle 1 -jitter 3 -root
 #warp on
+
 #RP commands
 #aliasarestart "exec ratpoison -c 'restart ~/.config/ratpoison/.ratpoisonrc'"
 #set chdir ~/.config/ratpoison/
@@ -55,7 +56,9 @@ definekey super-x c      exec dratmenu
 definekey top s-x        readkey super-x
 definekey super-x Q      exec ratpoison -c quit
 definekey super-x e      exec emacs
+definekey super-x E      exec emacs -q -l ~/Emacs-project/init.el
 #definekey super-x m     exec  urxvt -e mutt > /dev/null &
+
 
 definekey super-x 1    exec  ratpoison -c "frestore `tail -n 1 .config/ratframe/ratframe1`" ;  ratpoison -c next
 definekey super-x 2    exec  ratpoison -c "frestore `tail -n 1 .config/ratframe/ratframe2`" ;  ratpoison -c next
@@ -77,7 +80,6 @@ definekey super-x m    exec scrot -e 'convert $f label:"%x %X" -append $f'
 
 #definekey super-x v  exec ./bin/conky.sh & sleep 9s && killall conky
 #definekey super-x v   exec ./bin/conky.sh & ratpoison -c "set padding 0 15 0 0" & sleep 25s && killall conky ; ratpoison -c "set padding 0 0 0 0" &
-
 #definekey super-x t   exec ratpoison -c "setenv fs1 `ratpoison -c 'fdump'`"
 
 #restore the frame layout in slot #1

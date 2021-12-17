@@ -109,31 +109,31 @@ Also check [[https://github.com/abo-abo/hydra][the project's source]] for more i
 ** IT and theme
 
 #+begin_src emacs-lisp
-(use-package emacs
-  :init
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
-  (show-paren-mode 1)
-  (delete-selection-mode 1)
-  (save-place-mode 1)
-  (global-visual-line-mode 1)
-  :config
-  (setq message-directory "~/.emacs.d/mail/")
-  (setq gnus-directory "~/.emacs.d/news/")
-  (setq nnfolder-directory "~/.emacs.d/mail/archive")
-  (setq use-file-dialog nil)
-  (setq use-dialog-box nil)
-  (setq inhibit-splash-screen t)
-  (setq-default truncate-lines t)
-  (global-unset-key (kbd "C-z"))
-  (global-unset-key (kbd "C-x C-z"))
-  (global-unset-key (kbd "C-h h")))
-  ;(require 'multi-term)
-  ;(setq multi-term-program "/bin/bash")
-  (setq auto-save-default nil)  ;; stop creating those #auto-save# files
-  (setq make-backup-files nil)
-  (setq create-lockfiles nil)
+  (use-package emacs
+    :init
+    (menu-bar-mode -1)
+    (tool-bar-mode -1)
+    (scroll-bar-mode -1)
+    (show-paren-mode 1)
+    (delete-selection-mode 1)
+    (save-place-mode 1)
+    (global-visual-line-mode 1)
+    :config
+    (setq message-directory "~/.emacs.d/mail/")
+    (setq gnus-directory "~/.emacs.d/news/")
+    (setq nnfolder-directory "~/.emacs.d/mail/archive")
+    (setq use-file-dialog nil)
+    (setq use-dialog-box nil)
+    (setq inhibit-splash-screen t)
+    (setq-default truncate-lines t)
+    (global-unset-key (kbd "C-z"))
+    (global-unset-key (kbd "C-x C-z"))
+    (global-unset-key (kbd "C-h h")))
+    ;(require 'multi-term)
+    ;(setq multi-term-program "/bin/bash")
+    (setq auto-save-default nil)  ;; stop creating those #auto-save# files
+    (setq make-backup-files nil)
+    (setq create-lockfiles nil)
 
 #+end_src
 
@@ -155,8 +155,9 @@ Also check [[https://github.com/abo-abo/hydra][the project's source]] for more i
 
 #+begin_src emacs-lisp
 (set-face-attribute 'default nil
-                    :family "Comic regular"
-                    :height 115
+                    ;;:family "Comic regular"
+                    :family "Fira Code Retina"
+                    :height 120
                     :weight 'normal
                     :width 'normal)
 ;(add-to-list 'default-frame-alist
@@ -166,7 +167,7 @@ Also check [[https://github.com/abo-abo/hydra][the project's source]] for more i
   ;;font zoom
     (define-globalized-minor-mode
       global-text-scale-mode
-      text-scale-mode
+     // text-scale-mode
       (lambda () (text-scale-mode .2)))
 
      (defun global-text-scale-adjust (inc) (interactive)
@@ -205,52 +206,12 @@ Also check [[https://github.com/abo-abo/hydra][the project's source]] for more i
 
 #+begin_src emacs-lisp
 (require 'dired-x)			   ; require additional functionality for dired ;
-(add-hook 'dired-mode-hook                 ; when running dired-mode to edit directories...
-  (lambda ()                               ; run the following 0-arg function which...
-     (setq dired-omit-files                ; sets a regexp for which files to hide
-            "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.[a-zA-Z]")
-     (dired-omit-mode 1)                   ; initially hide uninteresting files
-     (local-set-key [f12] 'dired-omit-mode)  ; toggle hiding 'uninteresting' files...
-     ; and some other stuff
-))
-
-
-
-(use-package dired-open
-  :config
-  ;; Doesn't work as expected!
-  ;;(add-to-list 'dired-open-functions #'dired-open-xdg t)
-  (setq dired-open-extensions '(("png" . "feh")
-                                ("jpg" . "feh")
-                                ("mp3" . "mpv")
-                                ("mkv" . "mpv")
-                                ("mp4" . "mpv"))))
-
-;(use-package dired-hide-dotfiles
- ; :hook (dired-mode . dired-hide-dotfiles-mode)
- ; :config
- ; (evil-collection-define-key 'normal 'dired-mode-map
- ;   "H" 'dired-hide-dotfiles-mode))
-
-;;(global-font-lock-mode 1)
-#+end_src
-** Ibuffer
-
-#+begin_src emacs-lisp
-;;buffer-list
-(defalias 'list-buffers 'ibuffer)
-
-;;(defalias 'list-buffers 'ibuffer-ather-window)
-
-; (require 'ibuf-ext)
- ;   (add-to-list 'ibuffer-never-show-predicates "^\\*")
-#+end_src
-
+(add-hook 'dired-mode-hook                 ; when running dired-mode t
 ** completion
 
 ;;-->#+BEGIN_SRC emacs-lisp
  (use-package auto-complete
-:ensure t
+ :ensure t
 :init
 (progn
 (ac-config-default)
@@ -258,6 +219,8 @@ Also check [[https://github.com/abo-abo/hydra][the project's source]] for more i
 (add-to-list 'ac-modes 'org-mode)
  (ac-set-trigger-key "TAB")
 ))
+
+
 #+END_SRC
 
 ** Transparancy
@@ -903,118 +866,118 @@ conceptually similar to functions in [[#h:7862f39e-aed0-4d02-9f1e-60c4601a9734][
 well as the ones in [[#h:06290f9c-491c-45b2-b213-0248f890c83d][the Ibuffer section]].
 
 #+begin_src emacs-lisp
-(use-package dired
-  :config
-  (setq dired-recursive-copies 'always)
-  (setq dired-recursive-deletes 'always)
-  (setq delete-by-moving-to-trash t)
-  (setq dired-listing-switches
-        "-AGFhlv --group-directories-first --time-style=long-iso")
-  (setq dired-dwim-target t)
-  ;; Note that the the syntax for `use-package' hooks is controlled by
-  ;; the `use-package-hook-name-suffix' variable.  The "-hook" suffix is
-  ;; not an error of mine.
-  :hook ((dired-mode-hook . dired-hide-details-mode)
-         (dired-mode-hook . hl-line-mode)))
+  (use-package dired
+    :config
+    (setq dired-recursive-copies 'always)
+    (setq dired-recursive-deletes 'always)
+    (setq delete-by-moving-to-trash t)
+    (setq dired-listing-switches
+	  "-AGFhlv --group-directories-first --time-style=long-iso")
+    (setq dired-dwim-target t)
+    ;; Note that the the syntax for `use-package' hooks is controlled by
+    ;; the `use-package-hook-name-suffix' variable.  The "-hook" suffix is
+    ;; not an error of mine.
+    :hook ((dired-mode-hook . dired-hide-details-mode)
+	   (dired-mode-hook . hl-line-mode)))
 
-(use-package dired-aux
-  :config
-  (setq dired-isearch-filenames 'dwim)
-  ;; The following variables were introduced in Emacs 27.1
-  (setq dired-create-destination-dirs 'ask)
-  (setq dired-vc-rename-file t)
+  (use-package dired-aux
+    :config
+    (setq dired-isearch-filenames 'dwim)
+    ;; The following variables were introduced in Emacs 27.1
+    (setq dired-create-destination-dirs 'ask)
+    (setq dired-vc-rename-file t)
 
-  ;; TODO defmacro to avoid duplication of code in `fd' functions
-  ;; TODO how can a defmacro produce named functions that are then
-  ;; mapped to keys?
-  (defun prot/dired-fd-dirs (&optional arg)
-    "Search for directories in VC root or PWD.
-With \\[universal-argument] put the results in a `dired' buffer.
-This relies on the external 'fd' executable."
-    (interactive "P")
-    (let* ((vc (vc-root-dir))
-           (dir (expand-file-name (if vc vc default-directory)))
-           (regexp (read-regexp
-                    (concat "Subdirectories matching REGEXP in "
-                            (propertize dir 'face 'bold)
-                            ": ")))
-           (names (process-lines "fd" "-i" "-H" "-a" "-t" "d" "-c" "never" regexp dir))
-           (buf "*FD Dired*"))
-      (if names
-          (if arg
-              (dired (cons (generate-new-buffer-name buf) names))
-            (icomplete-vertical-do ()
-              (find-file
-               (completing-read (concat
-                                 "Files or directories matching "
-                                 (propertize regexp 'face 'success)
-                                 (format " (%s)" (length names))
-                                 ": ")
-                                names nil t)))))
-      (user-error (concat "No matches for " "«" regexp "»" " in " dir))))
+    ;; TODO defmacro to avoid duplication of code in `fd' functions
+    ;; TODO how can a defmacro produce named functions that are then
+    ;; mapped to keys?
+    (defun prot/dired-fd-dirs (&optional arg)
+      "Search for directories in VC root or PWD.
+  With \\[universal-argument] put the results in a `dired' buffer.
+  This relies on the external 'fd' executable."
+      (interactive "P")
+      (let* ((vc (vc-root-dir))
+	     (dir (expand-file-name (if vc vc default-directory)))
+	     (regexp (read-regexp
+		      (concat "Subdirectories matching REGEXP in "
+			      (propertize dir 'face 'bold)
+			      ": ")))
+	     (names (process-lines "fd" "-i" "-H" "-a" "-t" "d" "-c" "never" regexp dir))
+	     (buf "*FD Dired*"))
+	(if names
+	    (if arg
+		(dired (cons (generate-new-buffer-name buf) names))
+	      (icomplete-vertical-do ()
+		(find-file
+		 (completing-read (concat
+				   "Files or directories matching "
+				   (propertize regexp 'face 'success)
+				   (format " (%s)" (length names))
+				   ": ")
+				  names nil t)))))
+	(user-error (concat "No matches for " "«" regexp "»" " in " dir))))
 
-  (defun prot/dired-fd-files-and-dirs (&optional arg)
-    "Search for files and directories in VC root or PWD.
-With \\[universal-argument] put the results in a `dired' buffer.
-This relies on the external 'fd' executable."
-    (interactive "P")
-    (let* ((vc (vc-root-dir))
-           (dir (expand-file-name (if vc vc default-directory)))
-           (regexp (read-regexp
-                    (concat "Files and dirs matching REGEXP in "
-                            (propertize dir 'face 'bold)
-                            ": ")))
-           (names (process-lines "fd" "-i" "-H" "-a" "-t" "d" "-t" "f" "-c" "never" regexp dir))
-           (buf "*FD Dired*"))
-      (if names
-          (if arg
-              (dired (cons (generate-new-buffer-name buf) names))
-            (icomplete-vertical-do ()
-              (find-file
-               (completing-read (concat
-                                 "Files and directories matching "
-                                 (propertize regexp 'face 'success)
-                                 (format " (%s)" (length names))
-                                 ": ")
-                                names nil t)))))
-      (user-error (concat "No matches for " "«" regexp "»" " in " dir))))
+    (defun prot/dired-fd-files-and-dirs (&optional arg)
+      "Search for files and directories in VC root or PWD.
+  With \\[universal-argument] put the results in a `dired' buffer.
+  This relies on the external 'fd' executable."
+      (interactive "P")
+      (let* ((vc (vc-root-dir))
+	     (dir (expand-file-name (if vc vc default-directory)))
+	     (regexp (read-regexp
+		      (concat "Files and dirs matching REGEXP in "
+			      (propertize dir 'face 'bold)
+			      ": ")))
+	     (names (process-lines "fd" "-i" "-H" "-a" "-t" "d" "-t" "f" "-c" "never" regexp dir))
+	     (buf "*FD Dired*"))
+	(if names
+	    (if arg
+		(dired (cons (generate-new-buffer-name buf) names))
+	      (icomplete-vertical-do ()
+		(find-file
+		 (completing-read (concat
+				   "Files and directories matching "
+				   (propertize regexp 'face 'success)
+				   (format " (%s)" (length names))
+				   ": ")
+				  names nil t)))))
+	(user-error (concat "No matches for " "«" regexp "»" " in " dir))))
 
-  (defun contrib/cdb--bookmarked-directories ()
-    (bookmark-maybe-load-default-file)
-    (cl-loop for (name . props) in bookmark-alist
-             for fn = (cdr (assq 'filename props))
-             when (and fn (string-suffix-p "/" fn))
-             collect (cons name fn)))
+    (defun contrib/cdb--bookmarked-directories ()
+      (bookmark-maybe-load-default-file)
+      (cl-loop for (name . props) in bookmark-alist
+	       for fn = (cdr (assq 'filename props))
+	       when (and fn (string-suffix-p "/" fn))
+	       collect (cons name fn)))
 
-  (defun contrib/cd-bookmark (bm)
-    "Insert the path of a bookmarked directory."
-    (interactive
-     (list (let ((enable-recursive-minibuffers t))
-             (completing-read
-              "Directory: " (contrib/cdb--bookmarked-directories) nil t))))
-    (when (minibufferp)
-      (delete-region (minibuffer-prompt-end) (point-max)))
-    (insert (cdr (assoc bm (contrib/cdb--bookmarked-directories)))))
-  :bind (("M-s d" .  prot/dired-fd-dirs)
-         ("M-s z" . prot/dired-fd-files-and-dirs)
-         :map dired-mode-map
-         ("C-+" . dired-create-empty-file)
-         ("M-s f" . nil)
-         :map minibuffer-local-filename-completion-map
-         ("C-c d" . contrib/cd-bookmark)))
+    (defun contrib/cd-bookmark (bm)
+      "Insert the path of a bookmarked directory."
+      (interactive
+       (list (let ((enable-recursive-minibuffers t))
+	       (completing-read
+		"Directory: " (contrib/cdb--bookmarked-directories) nil t))))
+      (when (minibufferp)
+	(delete-region (minibuffer-prompt-end) (point-max)))
+      (insert (cdr (assoc bm (contrib/cdb--bookmarked-directories)))))
+    :bind (("M-s d" .  prot/dired-fd-dirs)
+	   ("M-s z" . prot/dired-fd-files-and-dirs)
+	   :map dired-mode-map
+	   ("C-+" . dired-create-empty-file)
+	   ("M-s f" . nil)
+	   :map minibuffer-local-filename-completion-map
+	   ("C-c d" . contrib/cd-bookmark)))
 
-(use-package find-dired
-  :after dired
-  :config
-  (setq find-ls-option
-        '("-ls" . "-AGFhlv --group-directories-first --time-style=long-iso"))
-  (setq find-name-arg "-iname"))
+  (use-package find-dired
+    :after dired
+    :config
+    (setq find-ls-option
+	  '("-ls" . "-AGFhlv --group-directories-first --time-style=long-iso"))
+    (setq find-name-arg "-iname"))
 
-(use-package async :ensure)
+  (use-package async :ensure)
 
-(use-package dired-async
-  :after (dired async)
-  :hook (dired-mode-hook . dired-async-mode))
+  (use-package dired-async
+    :after (dired async)
+    :hook (dired-mode-hook . dired-async-mode))
 #+end_src
 
 *Pro tip* while renaming or copying a file, =M-n= will return its original

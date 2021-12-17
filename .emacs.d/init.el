@@ -37,3 +37,4 @@
 (put 'set-goal-column 'disabled nil)
 ;(add-hook 'emacs-startup-hook '(eshell) 
 ;(multi-term) 
+(put 'dired-find-alternate-file 'disabled nil)
