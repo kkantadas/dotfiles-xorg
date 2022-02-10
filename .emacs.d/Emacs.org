@@ -888,6 +888,10 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
   ;;  (global-set-key (kbd "C-c a") 'kk/internet-connect)
 
 
+  (exwm-input-set-key (kbd "s--")
+                      (lambda () (interactive) (shell-command "amixer set Master 5%-")))
+
+
   (defun kk/sys-info()
     (interactive)
     (shell-command "echo  Net:`iw wlan0 info|grep ssid|cut -c6-50` ... Mem: `free -h | grep Mem | cut -c27-30` ... Themp:`acpi -t|cut -c15-19`C ... Date:`date|cut -c11-16` `date|cut -c1-10` ")
@@ -1188,7 +1192,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
       (ac-set-trigger-key "TAB")
       (ac-config-default)
 
-      (add-to-list 'ac-modes 'org-mode 'text-mode)
+      (add-to-list 'ac-modes 'text-mode)
       (setq ac-delay 0.02)
       (setq ac-use-menu-map t)
       (setq ac-menu-height 50)
@@ -1197,7 +1201,8 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
       (setq ac-ignore-case nil)
       (setq ac-dwim  t)
       (setq ac-fuzzy-enable t)
-      ))
+      )) 
+
 
 
                                           ;  (use-package auto-complete
@@ -1421,7 +1426,6 @@ This is an example of configuring another non-Emacs application using org-mode. 
     ;; When window "class" updates, use it to set the buffer name
     (add-hook 'exwm-update-class-hook #'efs/exwm-update-class)
 
-
     ;; Set the screen resolution (update this to be the correct resolution for your screen!)
     (require 'exwm-randr)
     (exwm-randr-enable)
@@ -1481,3 +1485,4 @@ This is an example of configuring another non-Emacs application using org-mode. 
     (exwm-enable))
 
 #+end_src
+
