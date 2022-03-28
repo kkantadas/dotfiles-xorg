@@ -72,10 +72,11 @@ definekey super-x 9    exec   transset-df 0.9
 definekey super-x 0    exec   transset-df 1.0
 definekey super-x "apostrophe"  exec ./bin/wifi.sh
 definekey super-x F1   exec ratpoison -c "hsplit 21/29" -c focusleft -c "hsplit " -c focusleft -c "resize -190 0" -c  exchangeright
-definekey super-x x    exec urxvt -e ranger &
-#definekey super-x w    exec chromium --process-per-site
-definekey super-x w exec firefox &
-definekey super-x m    exec scrot -e 'convert $f label:"%x %X" -append $f'
+definekey super-x x   exec rat-ranger &
+definekey super-x X   exec urxvt -e ranger &
+#definekey super-x w exec chromium --process-per-site
+definekey super-x w exec rat-or-raise firefox &
+definekey super-x m exec scrot -e 'convert $f label:"%x %X" -append $f'
 # exec sh ~/.fehbg &
 
 #definekey super-x v  exec ./bin/conky.sh & sleep 9s && killall conky
@@ -89,6 +90,7 @@ definekey super-x p exec ratpoison -c "frestore `tail -n 1 .config/ratframe/fsPi
 #definekey super-x C exec ratpoison -c "echo Connecting Ethernet `con` "
 definekey super-x r exec ratpoison -c "frestore `ratpoison -c 'getenv fs1'`"
 definekey super-x s exec ratpoison -c "vsplit 5/6" -c focusdown
+definekey super-x S exec ratpoison -c "vsplit 5/6" -c focusdown & urxvt  
 definekey super-x f exec xterm -e w3m -B
 
 definekey super-x l exec ratpoison -c fdump > dump
@@ -113,7 +115,6 @@ bind k exec ratpoison -c focusup
 bind j exec ratpoison -c focusdown 
 bind h exec ratpoison -c focusleft
 bind l exec ratpoison -c focusright
-
 bind C-k exec ratpoison -c exchangeup
 bind C-j exec ratpoison -c exchangedown
 bind C-h exec ratpoison -c exchangeleft
@@ -121,7 +122,7 @@ bind C-l exec ratpoison -c exchangeright
 
 bind C exec urxvt -bg grey -fg black & sleep 0.3 && transset-df -a 0.7
 bind s exec ratpoison -c  vsplit -c focusdown
-bind parenright exec ratpoison -c "frestore `tail -n 1 .config/ratframe/dump`" & sleep 0.5s && sudo systemctl suspend  
+bind parenright exec ratpoison -c "frestore `tail -n 1 .config/ratframe/dump`" & sleep 0.6s && sudo systemctl suspend  
 
 bind S exec ratpoison -c  hsplit -c focusright
 bind O exec ratpoison -c kill 
@@ -243,7 +244,7 @@ definekey super-x V exec urxvt -e ranger Vedatxt &
 #bind h exec amixer -q set Master 10-
 #bind C exec urxvt -bg grey -fg black & sleep 0.3 && transset-df -a 0.7
 bind s exec ratpoison -c  vsplit -c focusdown
-bind parenright exec ratpoison -c "frestore `tail -n 1 .config/ratframe/dump`" & sleep 0.5s && sudo systemctl suspend  
+#bind parenright exec ratpoison -c "frestore `tail -n 1 .config/ratframe/dump`" & sleep 0.5s && sudo systemctl suspend  
 
 bind S exec ratpoison -c  hsplit -c focusright
 bind C exec  urxvt -bg '#F8C888' -fg '#392613' -fn "xft:comic shanns:pixelsize=16"

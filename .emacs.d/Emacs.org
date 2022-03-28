@@ -142,7 +142,27 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
                   '(lambda () (interactive)
                      (kk/split-vertical)))
 
+  #+end_src
+
+** Window small Split
+
+#+begin_src emacs-lisp
+
+  (defun kk/small-split ()
+    (interactive)
+    (kk/split-horizontal)
+    (kk/split-horizontal)
+    (split-window-vertically)
+    (delete-window)
+    (delete-window)
+    (windmove-down))
+
+  (global-set-key (kbd "s-x S")
+                  '(lambda () (interactive)
+                     (kk/small-split)))
+
 #+end_src
+
 
 ** Window swap
 
@@ -151,14 +171,24 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
   (use-package windmove
     :config
     (setq windmove-create-window nil) 
-    :bind (("s-<S-up>" . windmove-swap-states-up)
-           ("s-<S-right> " . windmove-swap-states-right)
-           ("s-<S-down>" . windmove-swap-states-down)
-           ("s-<S-left>" . windmove-swap-states-left)))
+    :bind (("C-c <S-up>" . windmove-swap-states-up)
+           ("C-c <S-right> " . windmove-swap-states-right)
+           ("C-c <S-down>" . windmove-swap-states-down)
+           ("C-c <S-left>" . windmove-swap-states-left)))
+
+
+  ;; (use-package windmove
+  ;;   :config
+  ;;   (setq windmove-create-window nil) 
+  ;;   :bind (("s-<S-up>" . windmove-swap-states-up)
+  ;;          ("s-<S-right> " . windmove-swap-states-right)
+  ;;          ("s-<S-down>" . windmove-swap-states-down)
+  ;;          ("s-<S-left>" . windmove-swap-states-left)))
 
 
 
-#+end_src
+
+  #+end_src
 
 ** Window select
 :PROPERTIES:
@@ -178,48 +208,48 @@ This configuration uses [[https://evil.readthedocs.io/en/latest/index.html][evil
 
 ** Window popup
 
-#+begin_src emacs-lisp
+;;#+begin_src emacs-lisp
 
 (use-package popper
-  :ensure t ; or :straight t
-  :bind (("C-`"   . popper-toggle-latest)
-         ("M-`"   . popper-cycle)
-         ("C-M-`" . popper-toggle-type))
-  :init
-  (setq popper-reference-buffers
-        '("\\*Messages\\*"
-          "Output\\*$"
-          "\\*Async Shell Command\\*"
-          help-mode
-          compilation-mode))
-  (popper-mode +1)
-  (popper-echo-mode +1))                ; For echo area hints
+:ensure t ; or :straight t
+:bind (("C-`"   . popper-toggle-latest)
+("M-`"   . popper-cycle)
+("C-M-`" . popper-toggle-type))
+:init
+(setq popper-reference-buffers
+'("\\*Messages\\*"
+"Output\\*$"
+"\\*Async Shell Command\\*"
+help-mode
+compilation-mode))
+(popper-mode +1)
+(popper-echo-mode +1))                ; For echo area hints
 
 #+end_src
 
-** Reverse fullfscreen
+** Reverse fullfscreeb
 
 #+begin_src emacs-lisp
 
-      (use-package emacs
-        :config
-        (defvar kk/window-configuration nil
-          "Current window configuration.
+  (use-package emacs
+    :config
+    (defvar kk/window-configuration nil
+      "Current window configuration.
       Intended for use by `kk/window-monocle'.")
 
-        (defun kk/window-single-toggle ()
-          "Toggle between multiple windows and single window.
+    (defun kk/window-single-toggle ()
+      "Toggle between multiple windows and single window.
       This is the equivalent of maximising a window.  Tiling window
       managers such as DWM, BSPWM refer to this state as 'monocle'."
-          (interactive)
-          (if (one-window-p)
-              (when kk/window-configuration
-                (set-window-configuration kk/window-configuration))
-            (setq kk/window-configuration (current-window-configuration))
-            (delete-other-windows))))
-        ;:bind ("s-m" . kk/window-single-toggle)
+      (interactive)
+      (if (one-window-p)
+          (when kk/window-configuration
+            (set-window-configuration kk/window-configuration))
+        (setq kk/window-configuration (current-window-configuration))
+        (delete-other-windows))))
+                                          ;:bind ("s-m" . kk/window-single-toggle)
 
-    ;;Replacing Keybindings Portably
+  ;;Replacing Keybindings Portably
   (substitute-key-definition 'delete-other-windows 'kk/window-single-toggle global-map)
 
 #+end_src
@@ -240,7 +270,15 @@ This section configures basic UI settings that remove unneeded elements to make 
   (tooltip-mode -1)           ; Disable tooltips
   (set-fringe-mode 10)        ; Give some breathing room
   (show-paren-mode 1)
-  (menu-bar-mode -1)            ; Disable the menu bar
+  (menu-bar-mode -1)          ; Disable the menu bar
+
+                                          ;; hide messages and info buffers in ivy
+                                          (setq ivy-ignore-buffers '("\\` " "\\`\\*"))
+
+  (global-set-key (kbd "C-c c") 'kk/scratch)
+  (defun kk/scratch ()
+    (interactive)
+    (switch-to-buffer "*scratch*"))
 
 
   ;; Set up the visible bell
@@ -321,7 +359,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
   (dolist (command '(org-forward-sentence org-backward-sentence))
     (advice-add command :after #'pulse-area))
 
-  #+END_SRC
+#+END_SRC
 
 ** Dired
 
@@ -399,10 +437,10 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
       "l" 'dired-single-buffer))
 
 
-                                          ; Do not show details of dired
-                                          ;  (add-hook 'dired-mode-hook
-                                          ;           (lambda ()
-                                          ;            (dired-hide-details-mode)))
+  ;; Do not show details of dired
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (dired-hide-details-mode)))
 
   (use-package dired-single)
 
@@ -456,7 +494,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
                    (re-search-backward "\\(^[0-9.,]+[A-Za-z]+\\).*total$")
                    (match-string 1))))))
 
-  (define-key dired-mode-map (kbd "C-?") 'dired-get-size)
+  (define-key dired-mode-map (kbd "s-?") 'dired-get-size)
 
 #+end_src
 ** Line Highlight
@@ -663,7 +701,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
                  ("Edit" (or (mode . bash-mode) (mode . lisp-mode)))
                  ("Images" (or (mode . picture-mode) (mode . image-mode)))
                  ("Shell" (or (mode . eshell-mode) (mode . shell-mode)
-                              (mode . python-mode) (mode . c++-mode)))
+                              (mode . python-mode) (mode . c++-eode)))
 
                  ("Shell" (name . "\*vterm\*"))
                  ("Magit" (name . "magit\*"))
@@ -704,13 +742,13 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+begin_src emacs-lisp
 
-    (defun kk/sudo-find-file (file)
-      "Open FILE as root."
-      (interactive
-       (list (read-file-name "Open as root: ")))
-      (find-file (if (file-writable-p file)
-                     file
-                   (concat "/sudo:root@localhost:" file))))
+  (defun kk/sudo-find-file (file)
+    "Open FILE as root."
+    (interactive
+     (list (read-file-name "Open as root: ")))
+    (find-file (if (file-writable-p file)
+                   file
+                 (concat "/sudo:root@localhost:" file))))
 
   (global-set-key (kbd "C-c f") 'kk/sudo-find-file)
 
@@ -749,6 +787,15 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
         (current-buffer))
       '((side . bottom)))))
 
+#+end_src
+
+** Xranger
+
+#+begin_src emacs-lisp
+
+  (exwm-input-set-key (kbd "s-x X")
+                      (lambda () (interactive) (start-process "" nil "xranger.sh")))
+
 
 #+end_src
 
@@ -768,13 +815,6 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
     ([remap describe-command] . helpful-command)
     ([remap describe-variable] . counsel-describe-variable)
     ([remap describe-key] . helpful-key))
-
-#+end_src
-
-** try
-#+begin_src emacs-lisp
-
-
 
 #+end_src
 
@@ -808,7 +848,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
     (delete-other-windows)
     (sit-for 2)
     (shell-command "sudo systemctl suspend")
-    (message " "))
+    (message "...Z.Z.Z.Z.z.z.z.z... "))
 
   (exwm-input-set-key (kbd "C-c )") 'kk/suspend) 
 
@@ -823,7 +863,6 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
   (exwm-input-set-key (kbd "s-x w")
                       (lambda () (interactive) (start-process "" nil "firefox")))
-
 
 
 
@@ -860,7 +899,25 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
   (exwm-input-set-key (kbd "s-0")
                       (lambda () (interactive) (shell-command "amixer set Master 1+ toggle")))
 
+
 #+end_src
+
+** Screenshots
+
+#+begin_src emacs-lisp
+
+  ;; Print screen
+  (global-set-key (kbd "s-x m")
+                  (lambda ()
+                    (interactive)
+                    (let ((path (concat "~/.screenshot/Screenshot-" (format-time-string "%Y-%m-%d,%H:%M:%S") ".png")))
+                      (start-process-shell-command
+                       "import" nil (concat "import -window root " path))
+                      (message (concat "Screenshot saved to " path)))
+                    ))
+
+#+end_src
+
 
 ** Trash
 
@@ -870,6 +927,13 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
                       (lambda () (interactive)
                         (shell-command "rm -r /home/kanta/.Trash/{*,.[^.]*}")
                         (message "Trash is freed")))
+
+  (defun kk/empty ()
+    "Remove the Trash ; Super-R"
+    (interactive)
+    (shell-command "rm -r /home/kanta/.Trash/{*,.[^.]*}")
+    (message "Free Trash  ... or press Super-R"))
+
 
 #+end_src
 
@@ -894,7 +958,7 @@ This is an example of using [[https://github.com/abo-abo/hydra][Hydra]] to desig
 
   (defun kk/sys-info()
     (interactive)
-    (shell-command "echo  Net:`iw wlan0 info|grep ssid|cut -c6-50` ... Mem: `free -h | grep Mem | cut -c27-30` ... Themp:`acpi -t|cut -c15-19`C ... Date:`date|cut -c11-16` `date|cut -c1-10` ")
+    (shell-command "echo  Net:`iw wlan0 info|grep ssid|cut -c6-50` `cat /sys/class/net/enp2s0f1/operstate` .. Mem: `free -h | grep Mem | cut -c27-30` ... Themp:`acpi -t|cut -c15-19`C ... `date '+Time: %H:%M '` ...  Date: `date|cut -c1-10 ` ")
     (sit-for 6)
     (message " "))  
 
@@ -1108,19 +1172,40 @@ We use [[https://github.com/joostkremers/visual-fill-column][visual-fill-column]
 
 #+end_src
 
+** Org Roam
+
+#+begin_src emacs-lisp
+
+  (use-package org-roam
+    :ensure t
+    :init
+    (setq org-roam-v2-ack t)
+    :custom
+    (org-roam-directory "~/RoamNotes")
+    (org-roam-completion-everywhere t)
+    :bind (("C-c n l" . org-roam-buffer-toggle)
+           ("C-c n f" . org-roam-node-find)
+           ("C-c n i" . org-roam-node-insert)
+           :map org-mode-map
+           ("C-M-i"    . completion-at-point))
+    :config
+    (org-roam-setup))
+
+#+end_src
+
 ** Configure Babel Languages
 
 To execute or export code in =org-mode= code blocks, you'll need to set up =org-babel-load-languages= for each language you'd like to use.  [[https://orgmode.org/worg/org-contrib/babel/languages.html][This page]] documents all of the languages that you can use with =org-babel=.
 
 #+begin_src emacs-lisp
 
-(with-eval-after-load 'org
-  (org-babel-do-load-languages
-    'org-babel-load-languages
-    '((emacs-lisp . t)
-      (python . t)))
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)))
 
-  (push '("conf-unix" . conf-unix) org-src-lang-modes))
+    (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
 #+end_src
 
@@ -1150,29 +1235,29 @@ You can add more =src= block templates below by copying one of the lines and cha
 This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-config= gets executed each time such a buffer gets saved.  This function checks to see if the file being saved is the Emacs.org file you're looking at right now, and if so, automatically exports the configuration here to the associated output files.
 #+begin_src emacs-lisp
 
-;; Automatically tangle our Emacs.org config file when we save it
-(defun efs/org-babel-tangle-config ()
-  (when (string-equal (file-name-directory (buffer-file-name))
-                      (expand-file-name "~/.emacs.d/"))
-    ;; Dynamic scoping to the rescue
-    (let ((org-confirm-babel-evaluate nil))
-      (org-babel-tangle))))
+  ;; Automatically tangle our Emacs.org config file when we save it
+  (defun efs/org-babel-tangle-config ()
+    (when (string-equal (file-name-directory (buffer-file-name))
+                        (expand-file-name "~/.emacs.d/"))
+      ;; Dynamic scoping to the rescue
+      (let ((org-confirm-babel-evaluate nil))
+        (org-babel-tangle))))
 
-(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 
 #+end_src
 ;#+begin_src emacs-lisp
 
-  ;; Automatically tangle our Emacs.org config file when we save it
-  (defun efs/org-babel-tangle-config ()
-    (when (string-equal (buffer-file-name)
-                        (expand-file-name "Emacs.org"))
-      ;; Dynamic scoping to the rescue
+;; Automatically tangle our Emacs.org config file when we save it
+(defun efs/org-babel-tangle-config ()
+(when (string-equal (buffer-file-name)
+(expand-file-name "Emacs.org"))
+;; Dynamic scoping to the rescue
 
     
-      (let ((org-confirm-babel-evaluate nil))
-        (org-babel-tangle))))
-  (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
+(let ((org-confirm-babel-evaluate nil))
+(org-babel-tangle))))
+(add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'efs/org-babel-tangle-config)))
 
 #+end_src
 
@@ -1217,7 +1302,7 @@ This snippet adds a hook to =org-mode= buffers so that =efs/org-babel-tangle-con
                                           ;
   (global-set-key (kbd "M-<tab>") 'auto-complete-mode)
 
-    #+end_src
+#+end_src
 
 * Development
 ** IDE Features
@@ -1485,4 +1570,3 @@ This is an example of configuring another non-Emacs application using org-mode. 
     (exwm-enable))
 
 #+end_src
-
